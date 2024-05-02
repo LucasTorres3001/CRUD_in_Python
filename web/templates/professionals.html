@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load filters %}
+
+{% block title %}
+    Professionals
+{% endblock title %}
+{% block content %}
+<div class="container">
+    <header>
+        <div class="container">
+            <h1>Users</h1>
+        </div>
+    </header>
+    <section>
+        {% if messages %}
+            <br>
+            {% for msg in messages %}
+                <div class="{{msg.tags}}" role="alert">
+                    {{msg}}
+                </div>
+            {% endfor %}
+            <br>
+        {% endif %}
+        {% if personal_data %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Gender</th>
+                        <th scope="col">Ethnicity</th>
+                        <th scope="col">Boss</th>
+                        <th scope="col">Options</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    {% for pd in personal_data %}
+                        <tr>
+                            <th scope="row">#</th>
+                            <td>{{pd.name}} {{pd.surname}}</td>
+                            <td>{{pd.gender}}</td>
+                            <td>{{pd.ethnicity}}</td>
+                            <td>{{pd|get_user}}</td>
+                            <td>
+                                <a href="{% url 'data_update_page' pd.slug %}" class="btn btn-primary" role="button">Update</a>
+                                <a href="{% url 'user_delete' pd.id %}" class="btn btn-danger" role="button">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>There is no registered user.</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock content %}

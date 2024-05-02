@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Add jobs
+{% endblock title %}
+{% block content %}
+<div class="container">
+    <header>
+        <div class="container">
+            <h1>Add jobs</h1>
+        </div>
+    </header>
+    <section>
+        <br>
+        {% if messages %}
+            {% for msg in messages %}
+                <div class="{{msg.tags}}" role="alert">
+                    {{msg}}
+                </div>
+            {% endfor %}
+            <br>
+        {% endif %}
+        <form action="{% url 'add_jobs' %}" method="POST">{% csrf_token %}
+            <div class="input-group mb-3">
+                <span class="input-group-text">Profession name</span>
+                <input type="text" name="job" class="form-control" placeholder="Servente de pedreiro" maxlength="75" title="Job" aria-label="ProfessionName">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Salary R$</span>
+                <input type="text" name="salary" class="form-control" placeholder="0.000,00" maxlength="9" title="Salary" aria-label="Amount (to the nearest dollar)">
+                <span class="input-group-text">.00</span>
+            </div>
+            <button type="submit" class="btn btn-primary">Register job</button>
+        </form>
+        <br>
+        <a href="{% url 'home' %}" class="btn btn-secondary" role="button">To home</a>
+    </section>
+</div>
+{% endblock content %}

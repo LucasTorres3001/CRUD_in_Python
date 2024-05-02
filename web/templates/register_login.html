@@ -1,0 +1,44 @@
+{% extends "base_I.html" %}
+
+{% block title %}
+    Register login
+{% endblock title %}
+{% block content %}
+<div class="container">
+    <header>
+        <div class="container">
+            <h1>Register login</h1>
+        </div>
+    </header>
+    <section>
+        <br>
+        {% if messages %}
+            {% for msg in messages %}
+                <div class="{{msg.tags}}" role="alert">
+                    {{msg}}
+                </div>
+            {% endfor %}
+            <br>
+        {% endif %}
+        <form action="{% url 'register_login' %}" method="POST">{% csrf_token %}
+            <div class="input-group mb-3">
+                <span class="input-group-text">First and last name</span>
+                <input type="text" aria-label="First name" name="first_name" class="form-control" placeholder="First name" maxlength="19" title="First name">
+                <input type="text" aria-label="Last name" name="last_name" class="form-control" placeholder="Last name" maxlength="36" title="Last name">
+            </div>
+            <div class="input-group mb-3">
+                <input type="text" name="username" class="form-control" placeholder="Username" maxlength="56" title="Username" aria-label="Username">
+                <span class="input-group-text">@</span>
+                <input type="text" name="server" class="form-control" placeholder="Server" maxlength="30" title="Server" aria-label="Server">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">Password</span>
+                <input type="password" name="password" class="form-control" placeholder="Password" maxlength="10" title="Password" aria-label="Password" aria-describedby="basic-addon1">
+            </div>
+            <button type="submit" class="btn btn-primary">Register user</button>
+        </form>
+        <br>
+        <a href="{% url 'login' %}" class="btn btn-secondary" role="button">To login</a>
+    </section>
+</div>
+{% endblock content %}
