@@ -1,3 +1,4 @@
+import logging
 import os, sys
 from PIL import Image
 from io import BytesIO
@@ -36,7 +37,7 @@ def add_jobs(request: HttpRequest):
                 messages.add_message(request=request, level=messages.SUCCESS, message='Job successfully registered.')
                 return redirect(to=reverse(viewname='add_jobs'))
             except Exception as e:
-                messages.add_message(request=request, level=messages.ERROR, message=f'Profession cannot be registered: {str(e)}')
+                logging.exception(f'Profession cannot be registered: {repr(e)}')
                 return redirect(to=reverse(viewname='add_jobs'))
 
 def add_places(request: HttpRequest):
@@ -72,7 +73,7 @@ def add_places(request: HttpRequest):
                 messages.add_message(request=request, level=messages.SUCCESS, message='Location registered successfully.')
                 return redirect(to=reverse(viewname='add_places'))
             except Exception as e:
-                messages.add_message(request=request, level=messages.ERROR, message=f'Location cannot be registered: {str(e)}')
+                logging.exception(f'Location cannot be registered: {repr(e)}')
                 return redirect(to=reverse(viewname='add_places'))
 
 def add_users(request: HttpRequest):
@@ -145,7 +146,7 @@ def add_users(request: HttpRequest):
                 messages.add_message(request=request, level=messages.SUCCESS, message='Personal data registered successfully.')
                 return redirect(to=reverse(viewname='add_users'))
             except Exception as e:
-                messages.add_message(request=request, level=messages.ERROR, message=f'Personal data cannot be registered: {str(e)}')
+                logging.exception(f'Personal data cannot be registered: {str(e)}')
                 return redirect(to=reverse(viewname='add_users'))
 
 def data_update_page(request: HttpRequest, slug: str):
@@ -253,7 +254,7 @@ def register_login(request: HttpRequest):
                 messages.add_message(request=request, level=messages.SUCCESS, message='User registered successfully.')
                 return redirect(to=reverse(viewname='login'))
             except Exception as e:
-                messages.add_message(request=request, level=messages.ERROR, message=f'User cannot be registered: {str(e)}')
+                logging.exception(f'User cannot be registered: {str(e)}')
                 return redirect(to=reverse(viewname='register_login'))
 
 def show_data(request: HttpRequest, slug: str):
