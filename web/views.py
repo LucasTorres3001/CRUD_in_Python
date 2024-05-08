@@ -35,8 +35,8 @@ def add_jobs(request: HttpRequest):
                 job.save()
                 messages.add_message(request=request, level=messages.SUCCESS, message='Job successfully registered.')
                 return redirect(to=reverse(viewname='add_jobs'))
-            except:
-                messages.add_message(request=request, level=messages.ERROR, message='Profession cannot be registered.')
+            except Exception as e:
+                messages.add_message(request=request, level=messages.ERROR, message=f'Profession cannot be registered: {str(e)}')
                 return redirect(to=reverse(viewname='add_jobs'))
 
 def add_places(request: HttpRequest):
@@ -65,14 +65,14 @@ def add_places(request: HttpRequest):
                 workplace = Workplace(
                     city_work=city,
                     uf_work=uf,
-                    ddd_work=ddd,
+                    ddd_work=int(ddd),
                     region_work=region
                 )
                 workplace.save()
                 messages.add_message(request=request, level=messages.SUCCESS, message='Location registered successfully.')
                 return redirect(to=reverse(viewname='add_places'))
-            except:
-                messages.add_message(request=request, level=messages.ERROR, message='Location cannot be registered.')
+            except Exception as e:
+                messages.add_message(request=request, level=messages.ERROR, message=f'Location cannot be registered: {str(e)}')
                 return redirect(to=reverse(viewname='add_places'))
 
 def add_users(request: HttpRequest):
@@ -144,8 +144,8 @@ def add_users(request: HttpRequest):
                 comment.save()
                 messages.add_message(request=request, level=messages.SUCCESS, message='Personal data registered successfully.')
                 return redirect(to=reverse(viewname='add_users'))
-            except:
-                messages.add_message(request=request, level=messages.ERROR, message='Personal data cannot be registered.')
+            except Exception as e:
+                messages.add_message(request=request, level=messages.ERROR, message=f'Personal data cannot be registered: {str(e)}')
                 return redirect(to=reverse(viewname='add_users'))
 
 def data_update_page(request: HttpRequest, slug: str):
@@ -252,8 +252,8 @@ def register_login(request: HttpRequest):
                 user.save()
                 messages.add_message(request=request, level=messages.SUCCESS, message='User registered successfully.')
                 return redirect(to=reverse(viewname='login'))
-            except:
-                messages.add_message(request=request, level=messages.ERROR, message='User cannot be registered.')
+            except Exception as e:
+                messages.add_message(request=request, level=messages.ERROR, message=f'User cannot be registered: {str(e)}')
                 return redirect(to=reverse(viewname='register_login'))
 
 def show_data(request: HttpRequest, slug: str):
