@@ -1,4 +1,3 @@
-import logging
 import os, sys
 from PIL import Image
 from io import BytesIO
@@ -24,11 +23,11 @@ def add_jobs(request: HttpRequest):
     elif request.method == 'POST':
         profession_name = request.POST.get('job')
         salary = request.POST.get('salary')
-        if len(profession_name.strip()) < 4 or len(salary.strip()) < 1 or float(salary) < 1410:
-            messages.add_message(request=request, level=messages.WARNING, message='Invalid profession.')
-            return redirect(to=reverse(viewname='add_jobs'))
-        else:
-            try:
+        try:
+            if len(profession_name.strip()) < 4 or len(salary.strip()) < 1 or float(salary) < 1410:
+                messages.add_message(request=request, level=messages.WARNING, message='Invalid profession.')
+                return redirect(to=reverse(viewname='add_jobs'))
+            else:
                 job = Job(
                     profession_name=profession_name,
                     salary=float(salary)
@@ -36,9 +35,9 @@ def add_jobs(request: HttpRequest):
                 job.save()
                 messages.add_message(request=request, level=messages.SUCCESS, message='Job successfully registered.')
                 return redirect(to=reverse(viewname='add_jobs'))
-            except Exception as e:
-                logging.exception(f'Profession cannot be registered: {repr(e)}')
-                return redirect(to=reverse(viewname='add_jobs'))
+        except ValueError as ve:
+            messages.add_message(request=request, level=messages.ERROR, message=f'Profession cannot be registered: {repr(ve)}')
+            return redirect(to=reverse(viewname='add_jobs'))
 
 def add_places(request: HttpRequest):
     if request.method == 'GET':
@@ -51,11 +50,11 @@ def add_places(request: HttpRequest):
         uf = request.POST.get('uf')
         ddd = request.POST.get('ddd')
         region = request.POST.get('region')
-        if len(city.strip()) < 3 or len(uf.strip()) < 2 or len(region.strip()) < 5 or ddd == None:
-            messages.add_message(request=request, level=messages.WARNING, message='Invalid location.')
-            return redirect(to=reverse(viewname='add_places'))
-        else:
-            try:
+        try:
+            if len(city.strip()) < 3 or len(uf.strip()) < 2 or len(region.strip()) < 5 or ddd == None:
+                messages.add_message(request=request, level=messages.WARNING, message='Invalid location.')
+                return redirect(to=reverse(viewname='add_places'))
+            else:
                 birthplace = Birthplace(
                     city_birth=city,
                     uf_birth=uf,
@@ -72,9 +71,9 @@ def add_places(request: HttpRequest):
                 workplace.save()
                 messages.add_message(request=request, level=messages.SUCCESS, message='Location registered successfully.')
                 return redirect(to=reverse(viewname='add_places'))
-            except Exception as e:
-                logging.exception(f'Location cannot be registered: {repr(e)}')
-                return redirect(to=reverse(viewname='add_places'))
+        except Exception as e:
+            messages.add_message(request=request, level=messages.ERROR, message=f'Location cannot be registered: {repr(e)}')
+            return redirect(to=reverse(viewname='add_places'))
 
 def add_users(request: HttpRequest):
     if request.method == 'GET':
@@ -103,11 +102,11 @@ def add_users(request: HttpRequest):
         user = int(request.user.id)
         about_me = request.POST.get('comment')
         formatted_date = datetime.strptime(date_of_birth, '%Y-%m-%d')
-        if len(name.strip()) < 3 or len(surname.strip()) < 3 or len(cpf.strip()) < 11:
-            messages.add_message(request=request, level=messages.WARNING, message='Invalid username or CPF.')
-            return redirect(to=reverse(viewname='add_users'))
-        else:
-            try:
+        try:
+            if len(name.strip()) < 3 or len(surname.strip()) < 3 or len(cpf.strip()) < 11:
+                messages.add_message(request=request, level=messages.WARNING, message='Invalid username or CPF.')
+                return redirect(to=reverse(viewname='add_users'))
+            else:
                 personal_data = PersonalData(
                     name=name,
                     surname=surname,
@@ -145,9 +144,9 @@ def add_users(request: HttpRequest):
                 comment.save()
                 messages.add_message(request=request, level=messages.SUCCESS, message='Personal data registered successfully.')
                 return redirect(to=reverse(viewname='add_users'))
-            except Exception as e:
-                logging.exception(f'Personal data cannot be registered: {str(e)}')
-                return redirect(to=reverse(viewname='add_users'))
+        except Exception as e:
+            messages.add_message(request=request, level=messages.ERROR, message=f'Personal data cannot be registered: {repr(e)}')
+            return redirect(to=reverse(viewname='add_users'))
 
 def data_update_page(request: HttpRequest, slug: str):
     personal_data = PersonalData.objects.get(slug=slug)
@@ -229,20 +228,20 @@ def register_login(request: HttpRequest):
         password = request.POST.get('password')
         username = f'{first_name} {last_name}'
         user = User.objects.filter(username=username).filter(email=email).filter(password=password)
-        if len(first_name.strip()) < 2 or len(last_name.strip()) < 3:
-            messages.add_message(request=request, level=messages.WARNING, message='Invalid username.')
-            return redirect(to=reverse(viewname='register_login'))
-        elif len(username_email.strip()) < 3 or len(server.strip()) < 5:
-            messages.add_message(request=request, level=messages.WARNING, message='Invalid email.')
-            return redirect(to=reverse(viewname='register_login'))
-        elif len(password.strip()) < 3:
-            messages.add_message(request=request, level=messages.WARNING, message='Invalid password.')
-            return redirect(to=reverse(viewname='register_login'))
-        elif len(user) > 0:
-            messages.add_message(request=request, level=messages.INFO, message='User already exists.')
-            return redirect(to=reverse(viewname='register_login'))
-        else:
-            try:
+        try:
+            if len(first_name.strip()) < 2 or len(last_name.strip()) < 3:
+                messages.add_message(request=request, level=messages.WARNING, message='Invalid username.')
+                return redirect(to=reverse(viewname='register_login'))
+            elif len(username_email.strip()) < 3 or len(server.strip()) < 5:
+                messages.add_message(request=request, level=messages.WARNING, message='Invalid email.')
+                return redirect(to=reverse(viewname='register_login'))
+            elif len(password.strip()) < 3:
+                messages.add_message(request=request, level=messages.WARNING, message='Invalid password.')
+                return redirect(to=reverse(viewname='register_login'))
+            elif len(user) > 0:
+                messages.add_message(request=request, level=messages.INFO, message='User already exists.')
+                return redirect(to=reverse(viewname='register_login'))
+            else:
                 user = User.objects.create_user(
                     username=username,
                     email=email,
@@ -253,9 +252,9 @@ def register_login(request: HttpRequest):
                 user.save()
                 messages.add_message(request=request, level=messages.SUCCESS, message='User registered successfully.')
                 return redirect(to=reverse(viewname='login'))
-            except Exception as e:
-                logging.exception(f'User cannot be registered: {str(e)}')
-                return redirect(to=reverse(viewname='register_login'))
+        except Exception as e:
+            messages.add_message(request=request, level=messages.ERROR, message=f'User cannot be registered: {repr(e)}')
+            return redirect(to=reverse(viewname='register_login'))
 
 def show_data(request: HttpRequest, slug: str):
     personal_data = PersonalData.objects.get(slug=slug)
