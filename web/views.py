@@ -5,6 +5,7 @@ from hashlib import sha1
 from datetime import datetime
 from django.urls import reverse
 from django.conf import settings
+from .forms import FormTest
 from django.http import HttpRequest
 from django.contrib import auth, messages
 from django.contrib.auth.models import User
@@ -267,6 +268,16 @@ def show_data(request: HttpRequest, slug: str):
             'birthplace': birthplace,
             'job': job,
             'personal_data': personal_data
+        }
+    )
+    
+def teste(request: HttpRequest):
+    form = FormTest()
+    return render(
+        request=request,
+        template_name='teste.html',
+        context={
+            'form': form
         }
     )
 
