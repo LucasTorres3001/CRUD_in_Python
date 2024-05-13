@@ -6,7 +6,7 @@ from datetime import datetime
 from django.urls import reverse
 from django.conf import settings
 from .forms import FormTest
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.contrib import auth, messages
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -164,8 +164,9 @@ def data_update_page(request: HttpRequest, slug: str):
     )
 
 def home(request: HttpRequest):
+    user = get_object_or_404(User,id=request.user.id)
     if request.method == 'GET':
-        personal_data = PersonalData.objects.all()
+        personal_data = PersonalData.objects.filter(user=user)
         return render(
             request=request,
             template_name='home.html',
@@ -175,7 +176,7 @@ def home(request: HttpRequest):
         )
     elif request.method == 'POST':
         cpf = request.POST.get('cpf')
-        personal_data = PersonalData.objects.filter(cpf__icontains=cpf)
+        personal_data = PersonalData.objects.filter(user=user).filter(cpf__icontains=cpf)
         return render(
             request=request,
             template_name='home.html',
@@ -205,7 +206,8 @@ def login(request: HttpRequest):
             return redirect(to=reverse(viewname='register_login'))
 
 def professionals(request: HttpRequest):
-    personal_data = PersonalData.objects.all()
+    user = get_object_or_404(User,id=request.user.id)
+    personal_data = PersonalData.objects.filter(user=user)
     return render(
         request=request,
         template_name='professionals.html',
