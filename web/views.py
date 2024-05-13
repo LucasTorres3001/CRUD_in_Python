@@ -2,11 +2,11 @@ import os, sys
 from PIL import Image
 from io import BytesIO
 from hashlib import sha1
+from .forms import FormTest
 from datetime import datetime
 from django.urls import reverse
 from django.conf import settings
-from .forms import FormTest
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest
 from django.contrib import auth, messages
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -164,7 +164,7 @@ def data_update_page(request: HttpRequest, slug: str):
     )
 
 def home(request: HttpRequest):
-    user = get_object_or_404(User,id=request.user.id)
+    user = get_object_or_404(User, id=request.user.id)
     if request.method == 'GET':
         personal_data = PersonalData.objects.filter(user=user)
         return render(
@@ -206,7 +206,7 @@ def login(request: HttpRequest):
             return redirect(to=reverse(viewname='register_login'))
 
 def professionals(request: HttpRequest):
-    user = get_object_or_404(User,id=request.user.id)
+    user = get_object_or_404(User, id=request.user.id)
     personal_data = PersonalData.objects.filter(user=user)
     return render(
         request=request,
