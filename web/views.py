@@ -150,41 +150,48 @@ def add_users(request: HttpRequest):
             return redirect(to=reverse(viewname='add_users'))
 
 def data_update_page(request: HttpRequest, slug: str):
-    personal_data = PersonalData.objects.get(slug=slug)
-    workplace = personal_data.workplace
-    workplaces = Workplace.objects.all()
-    return render(
-        request=request,
-        template_name='update_data.html',
-        context={
-            'personal_data': personal_data,
-            'workplace': workplace,
-            'workplaces': workplaces
-        }
-    )
+    if request.session.get('user'):
+        personal_data = PersonalData.objects.get(slug=slug)
+        workplace = personal_data.workplace
+        workplaces = Workplace.objects.all()
+        return render(
+            request=request,
+            template_name='update_data.html',
+            context={
+                'personal_data': personal_data,
+                'workplace': workplace,
+                'workplaces': workplaces
+            }
+        )
+    else:
+        messages.add_message(request=request, level=messages.ERROR, message='User is not logged in.')
+        return redirect(to=reverse(viewname='login'))
 
 def home(request: HttpRequest):
-    user = get_object_or_404(User, id=request.user.id)
-    if request.method == 'GET':
-        personal_data = PersonalData.objects.filter(user=user)
-        return render(
-            request=request,
-            template_name='home.html',
-            context={
-                'personal_data': personal_data
-            }
-        )
-    elif request.method == 'POST':
-        cpf = request.POST.get('cpf')
-        personal_data = PersonalData.objects.filter(user=user).filter(cpf__icontains=cpf)
-        return render(
-            request=request,
-            template_name='home.html',
-            context={
-                'cpf': cpf,
-                'personal_data': personal_data
-            }
-        )
+    if request.session.get('user'):
+        if request.method == 'GET':
+            personal_data = PersonalData.objects.filter(user=request.session['user'])
+            return render(
+                request=request,
+                template_name='home.html',
+                context={
+                    'personal_data': personal_data
+                }
+            )
+        elif request.method == 'POST':
+            cpf = request.POST.get('cpf')
+            personal_data = PersonalData.objects.filter(user=request.session['user']).filter(cpf__icontains=cpf)
+            return render(
+                request=request,
+                template_name='home.html',
+                context={
+                    'cpf': cpf,
+                    'personal_data': personal_data
+                }
+            )
+    else:
+        messages.add_message(request=request, level=messages.ERROR, message='User is not logged in.')
+        return redirect(to=reverse(viewname='login'))
 
 def login(request: HttpRequest):
     if request.method == 'GET':
@@ -200,21 +207,25 @@ def login(request: HttpRequest):
         user = auth.authenticate(username=username, password=password)
         if user:
             auth.login(request=request, user=user)
+            request.session['user'] = request.user.id
             return redirect(to=reverse(viewname='home'))
         else:
             messages.add_message(request=request, level=messages.WARNING, message='User not found.')
             return redirect(to=reverse(viewname='register_login'))
 
 def professionals(request: HttpRequest):
-    user = get_object_or_404(User, id=request.user.id)
-    personal_data = PersonalData.objects.filter(user=user)
-    return render(
-        request=request,
-        template_name='professionals.html',
-        context={
-            'personal_data': personal_data
-        }
-    )
+    if request.session.get('user'):
+        personal_data = PersonalData.objects.filter(user=request.session['user'])
+        return render(
+            request=request,
+            template_name='professionals.html',
+            context={
+                'personal_data': personal_data
+            }
+        )
+    else:
+        messages.add_message(request=request, level=messages.ERROR, message='User is not logged in.')
+        return redirect(to=reverse(viewname='login'))
 
 def register_login(request: HttpRequest):
     if request.method == 'GET':
@@ -260,18 +271,22 @@ def register_login(request: HttpRequest):
             return redirect(to=reverse(viewname='register_login'))
 
 def show_data(request: HttpRequest, slug: str):
-    personal_data = PersonalData.objects.get(slug=slug)
-    birthplace = personal_data.birthplace
-    job = personal_data.job
-    return render(
-        request=request,
-        template_name='show_data.html',
-        context={
-            'birthplace': birthplace,
-            'job': job,
-            'personal_data': personal_data
-        }
-    )
+    if request.session.get('user'):
+        personal_data = PersonalData.objects.get(slug=slug)
+        birthplace = personal_data.birthplace
+        job = personal_data.job
+        return render(
+            request=request,
+            template_name='show_data.html',
+            context={
+                'birthplace': birthplace,
+                'job': job,
+                'personal_data': personal_data
+            }
+        )
+    else:
+        messages.add_message(request=request, level=messages.ERROR, message='User is not logged in.')
+        return redirect(to=reverse(viewname='login'))
     
 def teste(request: HttpRequest):
     form = FormTest()
@@ -284,6 +299,7 @@ def teste(request: HttpRequest):
     )
 
 def to_go_out(request: HttpRequest):
+    request.session.flush()
     auth.logout(request=request)
     return redirect(to=reverse(viewname='login'))
 
