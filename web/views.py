@@ -130,9 +130,7 @@ def add_users(request: HttpRequest):
                     output = BytesIO()
                     image.save(output, format='PNG', quality=100)
                     output.seek(0)
-                    img = InMemoryUploadedFile(
-                        output, 'ImageField', encrypted_image, 'image/png', sys.getsizeof(output), None
-                    )
+                    img = InMemoryUploadedFile(output, 'ImageField', encrypted_image, 'image/png', sys.getsizeof(output), None)
                     imagem = Imagem(
                         image=img,
                         personal_data=personal_data
@@ -321,9 +319,7 @@ def update_data(request: HttpRequest):
             output = BytesIO()
             image.save(output, format='PNG', quality=100)
             output.seek(0)
-            img = InMemoryUploadedFile(
-            output, 'ImageField', encrypted_image, 'image/png', sys.getsizeof(output), None
-        )
+            img = InMemoryUploadedFile(output, 'ImageField', encrypted_image, 'image/png', sys.getsizeof(output), None)
         imagem = Imagem.objects.get(personal_data=personal_data)
         imagem.image = img
         imagem.save()
