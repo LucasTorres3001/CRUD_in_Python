@@ -96,14 +96,14 @@ def add_users(request: HttpRequest):
         cpf = request.POST.get('cpf')
         gender = request.POST.get('gender')
         ethnicity = request.POST.get('ethnicity')
-        date_of_birth = request.POST.get('date_of_birth')
-        birthplace = int(request.POST.get('birthplace_id'))
-        workplace = int(request.POST.get('workplace_id'))
-        job = int(request.POST.get('job_id'))
-        user = int(request.user.id)
-        about_me = request.POST.get('comment')
-        formatted_date = datetime.strptime(date_of_birth, '%Y-%m-%d')
         try:
+            date_of_birth = request.POST.get('date_of_birth')
+            about_me = request.POST.get('comment')
+            formatted_date = datetime.strptime(date_of_birth, '%Y-%m-%d')
+            birthplace = int(request.POST.get('birthplace_id'))
+            workplace = int(request.POST.get('workplace_id'))
+            job = int(request.POST.get('job_id'))
+            user = int(request.user.id)
             if len(name.strip()) < 3 or len(surname.strip()) < 3 or len(cpf.strip()) < 11:
                 messages.add_message(request=request, level=messages.WARNING, message='Invalid username or CPF.')
                 return redirect(to=reverse(viewname='add_users'))
@@ -145,8 +145,8 @@ def add_users(request: HttpRequest):
                 comment.save()
                 messages.add_message(request=request, level=messages.SUCCESS, message='Personal data registered successfully.')
                 return redirect(to=reverse(viewname='add_users'))
-        except Exception as e:
-            messages.add_message(request=request, level=messages.ERROR, message=f'Personal data cannot be registered: {repr(e)}')
+        except ValueError as ve:
+            messages.add_message(request=request, level=messages.ERROR, message=f'Personal data cannot be registered: {repr(ve)}')
             return redirect(to=reverse(viewname='add_users'))
 
 def data_update_page(request: HttpRequest, slug: str):
