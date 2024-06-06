@@ -2,8 +2,8 @@ import os, sys
 from PIL import Image
 from io import BytesIO
 from hashlib import sha1
-from .forms import FormTest
 from datetime import datetime
+from .forms import ContactForm
 from django.urls import reverse
 from django.conf import settings
 from django.http import HttpRequest
@@ -287,7 +287,7 @@ def show_data(request: HttpRequest, slug: str):
         return redirect(to=reverse(viewname='login'))
     
 def teste(request: HttpRequest):
-    form = FormTest()
+    form = ContactForm()
     return render(
         request=request,
         template_name='teste.html',

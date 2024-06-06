@@ -11,8 +11,23 @@
         </div>
     </header>
     <section>
+        <br>
         <form>
-            {{form}}
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">Subject</span>
+                {{form.subject}}
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon">Email</span>
+                {{form.sender}}
+            </div>
+            <div class="mb-3 form-check">
+                <label class="form-check-label" for="exampleCheck1">{{form.cc_myself}} Check me out</label>
+            </div>
+            <div class="input-group">
+                <span class="input-group-text">With textarea</span>
+                {{form.message}}
+            </div>
         </form>
     </section>
 

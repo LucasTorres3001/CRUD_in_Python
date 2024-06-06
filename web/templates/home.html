@@ -5,40 +5,38 @@
     Home
 {% endblock title %}
 {% block content %}
-<div class="container">
-    <header>
-        <div class="container">
-            <form action="{% url 'home' %}" method="POST" class="d-flex" role="search">{% csrf_token %}
-                <input class="form-control me-2" type="search" name="cpf" title="CPF" placeholder="Search" maxlength="11" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-        </div>
-    </header>
-    <section>
+<header>
+    <div class="container">
+        <form action="{% url 'home' %}" method="POST" class="d-flex" role="search">{% csrf_token %}
+            <input class="form-control me-2" type="search" name="cpf" title="CPF" placeholder="Search" maxlength="11" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</header>
+<section>
+    <br>
+    {% if cpf %}
+        <h3>Search by CPF: <i>{{cpf}}</i></h3>
         <br>
-        {% if cpf %}
-            <h3>Search by CPF: <i>{{cpf}}</i></h3>
-            <br>
-        {% endif %}
-        {% if personal_data %}
-            <div class="row row-cols-1 row-cols-md-3 g-4">
-                {% for pd in personal_data %}
-                    <div class="col">
-                        <div class="card h-100">
-                            <img src="{{pd|get_the_first_image}}" class="card-img-top" alt="..." title="{{pd.name}} {{pd.surname}}">
-                            <div class="card-body">
-                                <h5 class="card-title">{{pd.name}} {{pd.surname}}</h5>
-                                <p class="card-text">{{pd.date_of_birth}}</p>
-                                <p class="card-text">{{pd|get_comment}}</p>
-                                <a href="{% url 'show_data' pd.slug %}" class="btn btn-primary">More</a>
-                            </div>
+    {% endif %}
+    {% if personal_data %}
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for pd in personal_data %}
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="{{pd|get_the_first_image}}" class="card-img-top" alt="..." title="{{pd.name}} {{pd.surname}}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{pd.name}} {{pd.surname}}</h5>
+                            <p class="card-text">{{pd.date_of_birth}}</p>
+                            <p class="card-text">{{pd|get_comment}}</p>
+                            <a href="{% url 'show_data' pd.slug %}" class="btn btn-primary">More</a>
                         </div>
                     </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            <p>There is no registered user.</p>
-        {% endif %}
-    </section>
-</div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>There is no registered user.</p>
+    {% endif %}
+</section>
 {% endblock content %}
