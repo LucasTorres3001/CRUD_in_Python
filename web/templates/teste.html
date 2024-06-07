@@ -12,7 +12,7 @@
     </header>
     <section>
         <br>
-        <form>
+        <form action="{% url 'test' %}" method="POST">{% csrf_token %}
             <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1">Subject</span>
                 {{form.subject}}
@@ -24,10 +24,13 @@
             <div class="mb-3 form-check">
                 <label class="form-check-label" for="exampleCheck1">{{form.cc_myself}} Check me out</label>
             </div>
-            <div class="input-group">
-                <span class="input-group-text">With textarea</span>
-                {{form.message}}
+            <div class="mb-3">
+                <div class="input-group">
+                    <span class="input-group-text">With textarea</span>
+                    {{form.message}}
+                </div>
             </div>
+            <button type="submit" class="btn btn-primary">Click</button>
         </form>
     </section>
 
