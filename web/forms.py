@@ -1,8 +1,16 @@
 from django import forms
+from .models import Birthplace
 
 # Create your Forms here.
 
 class ContactForm(forms.Form):
+    
+    gender_choices = [
+        ('', ''),
+        ('F', 'female'),
+        ('M', 'male'),
+        ('Others', 'Undefined gender')
+    ]
     subject = forms.CharField(
         max_length=100,
         widget=forms.TextInput(
@@ -33,3 +41,24 @@ class ContactForm(forms.Form):
         )
     )
     cc_myself = forms.BooleanField(required=False)
+    city_select = forms.ChoiceField(
+        choices=gender_choices,
+        widget=forms.Select(
+            attrs={
+                'class': 'form-control'
+            }
+        )
+    )
+    ethnicity = forms.RadioSelect(
+            attrs={
+                'class': 'form-check-input'
+            },choices=[
+                ('Amerindian', 'amerindian'),
+                ('Asian', 'asian'),
+                ('Black', 'black'),
+                ('Caboclo(a)', 'caboclo'),
+                ('Cafuzo(a)', 'cafuzo'),
+                ('Caucasian', 'caucasian'),
+                ('Mulato(a)', 'mulato')
+            ]
+        )
