@@ -3,36 +3,39 @@
 {% block title %}
     Test
 {% endblock title %}
-{% block content %}
-<div class="container">
-    <header>
-        <div class="container">
-            <h1>Test form</h1>
-        </div>
-    </header>
-    <section>
-        <br>
-        <form action="{% url 'test' %}" method="POST">{% csrf_token %}
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">Subject</span>
-                {{form.subject}}
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon">Email</span>
-                {{form.sender}}
-            </div>
-            <div class="mb-3 form-check">
-                <label class="form-check-label" for="exampleCheck1">{{form.cc_myself}} Check me out</label>
-            </div>
-            <div class="mb-3">
-                <div class="input-group">
-                    <span class="input-group-text">With textarea</span>
-                    {{form.message}}
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Click</button>
-        </form>
-    </section>
 
-</div>
+{% block content %}
+    {% include 'partials/navigation_bar.html' %}
+    <div class="container">
+        <div class="container">
+            <header>
+                <div class="container">
+                    <h1>Test form</h1>
+                </div>
+            </header>
+            <section>
+                <br>
+                <form action="{% url 'test' %}" method="POST">{% csrf_token %}
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Subject</span>
+                        {{form.subject}}
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon">Email</span>
+                        {{form.sender}}
+                    </div>
+                    <div class="mb-3 form-check">
+                        <label class="form-check-label" for="exampleCheck1">{{form.cc_myself}} Check me out</label>
+                    </div>
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text">With textarea</span>
+                            {{form.message}}
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Click</button>
+                </form>
+            </section>
+        </div>
+    </div>
 {% endblock content %}

@@ -3,40 +3,44 @@
 {% block title %}
     Add places
 {% endblock title %}
+
 {% block content %}
-<header>
+    {% include 'partials/navigation_bar.html' %}
     <div class="container">
-        <h1>Add places</h1>
-    </div>
-</header>
-<section>
-    <br>
-    {% if messages %}
-        {% for msg in messages %}
-            <div class="{{msg.tags}}" role="alert">
-                {{msg}}
+        <header>
+            <div class="container">
+                <h1>Add places</h1>
             </div>
-        {% endfor %}
-        <br>
-    {% endif %}
-    <form action="{% url 'add_places' %}" method="POST">{% csrf_token %}
-        <div class="input-group mb-3">
-            <span class="input-group-text">City</span>
-            <input type="text" name="city" class="form-control" placeholder="São Paulo" maxlength="75" title="City" aria-label="City">
-            <span class="input-group-text">-</span>
-            <input type="text" name="uf" class="form-control" placeholder="SP" maxlength="2" title="UF" aria-label="UF">
-        </div>
-        <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon1">DDD</span>
-            <input type="number" name="ddd" class="form-control" placeholder="11" max="99" min="11" title="DDD" aria-label="Ddd" aria-describedby="basic-addon1">
-        </div>
-        <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon1">Region</span>
-            <input type="text" name="region" class="form-control" placeholder="Southeast" maxlength="16" title="Region" aria-label="Region" aria-describedby="basic-addon">
-        </div>
-        <button type="submit" class="btn btn-primary">Register location</button>
-    </form>
-    <br>
-    <a href="{% url 'home' %}" class="btn btn-secondary" role="button">To home</a>
-</section>
+        </header>
+        <section>
+            <br>
+            {% if messages %}
+                {% for msg in messages %}
+                    <div class="{{msg.tags}}" role="alert">
+                        {{msg}}
+                    </div>
+                {% endfor %}
+                <br>
+            {% endif %}
+            <form action="{% url 'add_places' %}" method="POST">{% csrf_token %}
+                <div class="input-group mb-3">
+                    <span class="input-group-text">City</span>
+                    <input type="text" name="city" class="form-control" placeholder="São Paulo" maxlength="75" title="City" aria-label="City">
+                    <span class="input-group-text">-</span>
+                    <input type="text" name="uf" class="form-control" placeholder="SP" maxlength="2" title="UF" aria-label="UF">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">DDD</span>
+                    <input type="number" name="ddd" class="form-control" placeholder="11" max="99" min="11" title="DDD" aria-label="Ddd" aria-describedby="basic-addon1">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">Region</span>
+                    <input type="text" name="region" class="form-control" placeholder="Southeast" maxlength="16" title="Region" aria-label="Region" aria-describedby="basic-addon">
+                </div>
+                <button type="submit" class="btn btn-primary">Register location</button>
+            </form>
+            <br>
+            <a href="{% url 'home' %}" class="btn btn-secondary" role="button">To home</a>
+        </section>
+    </div>
 {% endblock content %}

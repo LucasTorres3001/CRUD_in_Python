@@ -1,34 +1,35 @@
-{% extends "base_I.html" %}
+{% extends "base.html" %}
 
 {% block title %}
     Login
 {% endblock title %}
 {% block content %}
-<div class="container">
-    <header>
-        <div class="container">
-            <h1>Login</h1>
-        </div>
-    </header>
-    <section>
-        <br>
-        {% if messages %}
-            {% for msg in messages %}
-                <div class="{{msg.tags}}" role="alert">
-                    {{msg}}
-                </div>
-            {% endfor %}
-            <br>
-        {% endif %}
-        <form action="{% url 'login' %}" method="POST">{% csrf_token %}
-            <div class="input-group mb-3">
-                <span class="input-group-text">Username</span>
-                <input type="text" name="username" class="form-control" placeholder="Username" title="Username" maxlength="55" aria-label="Username">
-                <span class="input-group-text">Password</span>
-                <input type="password" name="password" class="form-control" placeholder="Password" title="Password" maxlength="10" aria-label="Server">
+    {% include 'partials/navigation_bar_ll.html' %}
+    <div class="container">
+        <header>
+            <div class="container">
+                <h1>Login</h1>
             </div>
-            <button type="submit" class="btn btn-primary">Login</button>
-        </form>
-    </section>
-</div>
+        </header>
+        <section>
+            <br>
+            {% if messages %}
+                {% for msg in messages %}
+                    <div class="{{msg.tags}}" role="alert">
+                        {{msg}}
+                    </div>
+                {% endfor %}
+                <br>
+            {% endif %}
+            <form action="{% url 'login' %}" method="POST">{% csrf_token %}
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Username</span>
+                    <input type="text" name="username" class="form-control" placeholder="Username" title="Username" maxlength="55" aria-label="Username">
+                    <span class="input-group-text">Password</span>
+                    <input type="password" name="password" class="form-control" placeholder="Password" title="Password" maxlength="10" aria-label="Server">
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+        </section>
+    </div>
 {% endblock content %}

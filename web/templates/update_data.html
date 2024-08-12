@@ -4,47 +4,51 @@
 {% block title %}
     {{personal_data.name}} {{personal_data.surname}}
 {% endblock title %}
+
 {% block content %}
-<header>
+    {% include 'partials/navigation_bar.html' %}
     <div class="container">
-        <h1>{{personal_data.name}} {{personal_data.surname}}</h1>
-    </div>
-</header>
-<section>
-    <br>
-    {% if messages %}
-        {% for msg in messages %}
-            <div class="{{msg.tags}}" role="alert">
-                {{msg}}
+        <header>
+            <div class="container">
+                <h1>{{personal_data.name}} {{personal_data.surname}}</h1>
             </div>
-        {% endfor %}
-        <br>
-    {% endif %}
-    <form action="{% url 'update_data' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
-        <input type="hidden" name="pd_slug" value="{{personal_data.slug}}" id="inputId">
-        <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupSelect01">City of work</label>
-            <select class="form-select" name="new_workplace_id" id="inputGroupSelect01">
-                <option value="{{workplace.id}}">{{workplace.city_work}}</option>
-                {% for work in workplaces %}
-                    <option value="{{work.id}}">{{work.city_work}}</option>
+        </header>
+        <section>
+            <br>
+            {% if messages %}
+                {% for msg in messages %}
+                    <div class="{{msg.tags}}" role="alert">
+                        {{msg}}
+                    </div>
                 {% endfor %}
-            </select>
-        </div>
-        <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupFile01">Upload</label>
-            <input type="file" class="form-control" name="new_images" title="User image" id="inputGroupFile01" multiple>
-        </div>
-        <div class="mb-3">
-            <label for="floatingTextarea2" class="form-label">About me</label>
-            <div class="form-floating">
-                <textarea class="form-control" name="new_comment" placeholder="Leave a comment here" title="about me" id="floatingTextarea2" style="height: 100px">{{personal_data|get_comment}}</textarea>
-                <label for="floatingTextarea2">Comments</label>
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Update personal datas</button>
-    </form>
-    <br>
-    <a href="{% url 'professionals' %}" class="btn btn-secondary" role="button">To back</a>
-</section>
+                <br>
+            {% endif %}
+            <form action="{% url 'update_data' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+                <input type="hidden" name="pd_slug" value="{{personal_data.slug}}" id="inputId">
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="inputGroupSelect01">City of work</label>
+                    <select class="form-select" name="new_workplace_id" id="inputGroupSelect01">
+                        <option value="{{workplace.id}}">{{workplace.city_work}}</option>
+                        {% for work in workplaces %}
+                            <option value="{{work.id}}">{{work.city_work}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="inputGroupFile01">Upload</label>
+                    <input type="file" class="form-control" name="new_images" title="User image" id="inputGroupFile01" multiple>
+                </div>
+                <div class="mb-3">
+                    <label for="floatingTextarea2" class="form-label">About me</label>
+                    <div class="form-floating">
+                        <textarea class="form-control" name="new_comment" placeholder="Leave a comment here" title="about me" id="floatingTextarea2" style="height: 100px">{{personal_data|get_comment}}</textarea>
+                        <label for="floatingTextarea2">Comments</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Update personal datas</button>
+            </form>
+            <br>
+            <a href="{% url 'professionals' %}" class="btn btn-secondary" role="button">To back</a>
+        </section>
+    </div>
 {% endblock content %}

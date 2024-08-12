@@ -3,131 +3,135 @@
 {% block title %}
     Add users
 {% endblock title %}
+
 {% block content %}
-<header>
+    {% include 'partials/navigation_bar.html' %}
     <div class="container">
-        <h1>Add users</h1>
+        <header>
+            <div class="container">
+                <h1>Add users</h1>
+            </div>
+        </header>
+        <section>
+            <br>
+            {% if messages %}
+                {% for msg in messages %}
+                    <div class="{{msg.tags}}" role="alert">
+                        {{msg}}
+                    </div>
+                {% endfor %}
+                <br>
+            {% endif %}
+            <form action="{% url 'add_users' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+                <div class="input-group mb-3">
+                    <span class="input-group-text">First and last name</span>
+                    <input type="text" name="first_name" class="form-control" placeholder="Name" title="Name" maxlength="19" aria-label="FirstName">
+                    <input type="text" name="last_name" class="form-control" placeholder="Surname" title="Surname" maxlength="36" aria-label="LastName">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">CPF</span>
+                    <input type="text" name="cpf" class="form-control" placeholder="___.___.___-__" title="CPF" maxlength="11" aria-label="Cpf" aria-describedby="basic-addon1">
+                </div>
+                <div class="mb-3">
+                    <p>Gender</p>
+                    <input class="form-check-input" type="radio" name="gender" title="Female" id="female" value="F">
+                    <label class="form-check-label" for="female">
+                        Female
+                    </label>
+                    &nbsp;
+                    <input class="form-check-input" type="radio" name="gender" title="Male" id="male" value="M">
+                    <label class="form-check-label" for="male">
+                        Male
+                    </label>
+                    &nbsp;
+                    <input class="form-check-input" type="radio" name="gender" title="Others" id="others" value="Others">
+                    <label class="form-check-label" for="others">
+                        Others
+                    </label>
+                </div>
+                <div class="mb-3">
+                    <p>Ethnicity</p>
+                    <input class="form-check-input" type="radio" name="ethnicity" title="Amerindian" id="amerindian" value="Amerindian">
+                    <label class="form-check-label" for="amerindian">
+                        Amerindian
+                    </label>
+                    &nbsp;
+                    <input class="form-check-input" type="radio" name="ethnicity" title="Asian" id="asian" value="Asian">
+                    <label class="form-check-label" for="asian">
+                        Asian
+                    </label>
+                    &nbsp;
+                    <input class="form-check-input" type="radio" name="ethnicity" title="Black" id="black" value="Black">
+                    <label class="form-check-label" for="black">
+                        Black
+                    </label>
+                    &nbsp;
+                    <input class="form-check-input" type="radio" name="ethnicity" title="Cafuzo" id="cafuzo" value="Cafuzo">
+                    <label class="form-check-label" for="cafuzo">
+                        Cafuzo(a)
+                    </label>
+                    &nbsp;
+                    <input class="form-check-input" type="radio" name="ethnicity" title="Caboclo" id="caboclo" value="Caboclo">
+                    <label class="form-check-label" for="caboclo">
+                        Caboclo(a)
+                    </label>
+                    &nbsp;
+                    <input class="form-check-input" type="radio" name="ethnicity" title="Caucasian" id="caucasian" value="Caucasian">
+                    <label class="form-check-label" for="caucasian">
+                        Caucasian
+                    </label>
+                    &nbsp;
+                    <input class="form-check-input" type="radio" name="ethnicity" title="Mulato" id="mulato" value="Mulato">
+                    <label class="form-check-label" for="mulato">
+                        Mulato(a)
+                    </label>
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon">Date of birth</span>
+                    <input type="date" name="date_of_birth" class="form-control" title="Date of birth" aria-label="DateOfBirth" aria-describedby="basic-addon">
+                </div>
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="inputGroupSelect01">City of birth</label>
+                    <select class="form-select" name="birthplace_id" id="inputGroupSelect01">
+                        <option selected>Choose...</option>
+                        {% for birth in birthplace %}
+                            <option value="{{birth.id}}">{{birth.city_birth}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="inputGroupSelect01">City of work</label>
+                    <select class="form-select" name="workplace_id" id="inputGroupSelect01">
+                        <option selected>Choose...</option>
+                        {% for work in workplace %}
+                            <option value="{{work.id}}">{{work.city_work}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="inputGroupSelect01">Job</label>
+                    <select class="form-select" name="job_id" id="inputGroupSelect01">
+                        <option selected>Choose...</option>
+                        {% for prof in job %}
+                            <option value="{{prof.id}}">{{prof.profession_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="inputGroupFile01">Upload</label>
+                    <input type="file" class="form-control" name="images" title="User image" id="inputGroupFile01" multiple>
+                </div>
+                <div class="mb-3">
+                    <label for="floatingTextarea2" class="form-label">About me</label>
+                    <div class="form-floating">
+                        <textarea class="form-control" name="comment" placeholder="Leave a comment here" title="about me" id="floatingTextarea2" style="height: 100px"></textarea>
+                        <label for="floatingTextarea2">Comments</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Register personal datas</button>
+            </form>
+            <br>
+            <a href="{% url 'home' %}" class="btn btn-secondary" role="button">To home</a>
+        </section>
     </div>
-</header>
-<section>
-    <br>
-    {% if messages %}
-        {% for msg in messages %}
-            <div class="{{msg.tags}}" role="alert">
-                {{msg}}
-            </div>
-        {% endfor %}
-        <br>
-    {% endif %}
-    <form action="{% url 'add_users' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
-        <div class="input-group mb-3">
-            <span class="input-group-text">First and last name</span>
-            <input type="text" name="first_name" class="form-control" placeholder="Name" title="Name" maxlength="19" aria-label="FirstName">
-            <input type="text" name="last_name" class="form-control" placeholder="Surname" title="Surname" maxlength="36" aria-label="LastName">
-        </div>
-        <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon1">CPF</span>
-            <input type="text" name="cpf" class="form-control" placeholder="___.___.___-__" title="CPF" maxlength="11" aria-label="Cpf" aria-describedby="basic-addon1">
-        </div>
-        <div class="mb-3">
-            <p>Gender</p>
-            <input class="form-check-input" type="radio" name="gender" title="Female" id="female" value="F">
-            <label class="form-check-label" for="female">
-                Female
-            </label>
-            &nbsp;
-            <input class="form-check-input" type="radio" name="gender" title="Male" id="male" value="M">
-            <label class="form-check-label" for="male">
-                Male
-            </label>
-            &nbsp;
-            <input class="form-check-input" type="radio" name="gender" title="Others" id="others" value="Others">
-            <label class="form-check-label" for="others">
-                Others
-            </label>
-        </div>
-        <div class="mb-3">
-            <p>Ethnicity</p>
-            <input class="form-check-input" type="radio" name="ethnicity" title="Amerindian" id="amerindian" value="Amerindian">
-            <label class="form-check-label" for="amerindian">
-                Amerindian
-            </label>
-            &nbsp;
-            <input class="form-check-input" type="radio" name="ethnicity" title="Asian" id="asian" value="Asian">
-            <label class="form-check-label" for="asian">
-                Asian
-            </label>
-            &nbsp;
-            <input class="form-check-input" type="radio" name="ethnicity" title="Black" id="black" value="Black">
-            <label class="form-check-label" for="black">
-                Black
-            </label>
-            &nbsp;
-            <input class="form-check-input" type="radio" name="ethnicity" title="Cafuzo" id="cafuzo" value="Cafuzo">
-            <label class="form-check-label" for="cafuzo">
-                Cafuzo(a)
-            </label>
-            &nbsp;
-            <input class="form-check-input" type="radio" name="ethnicity" title="Caboclo" id="caboclo" value="Caboclo">
-            <label class="form-check-label" for="caboclo">
-                Caboclo(a)
-            </label>
-            &nbsp;
-            <input class="form-check-input" type="radio" name="ethnicity" title="Caucasian" id="caucasian" value="Caucasian">
-            <label class="form-check-label" for="caucasian">
-                Caucasian
-            </label>
-            &nbsp;
-            <input class="form-check-input" type="radio" name="ethnicity" title="Mulato" id="mulato" value="Mulato">
-            <label class="form-check-label" for="mulato">
-                Mulato(a)
-            </label>
-        </div>
-        <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon">Date of birth</span>
-            <input type="date" name="date_of_birth" class="form-control" title="Date of birth" aria-label="DateOfBirth" aria-describedby="basic-addon">
-        </div>
-        <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupSelect01">City of birth</label>
-            <select class="form-select" name="birthplace_id" id="inputGroupSelect01">
-                <option selected>Choose...</option>
-                {% for birth in birthplace %}
-                    <option value="{{birth.id}}">{{birth.city_birth}}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupSelect01">City of work</label>
-            <select class="form-select" name="workplace_id" id="inputGroupSelect01">
-                <option selected>Choose...</option>
-                {% for work in workplace %}
-                    <option value="{{work.id}}">{{work.city_work}}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupSelect01">Job</label>
-            <select class="form-select" name="job_id" id="inputGroupSelect01">
-                <option selected>Choose...</option>
-                {% for prof in job %}
-                    <option value="{{prof.id}}">{{prof.profession_name}}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupFile01">Upload</label>
-            <input type="file" class="form-control" name="images" title="User image" id="inputGroupFile01" multiple>
-        </div>
-        <div class="mb-3">
-            <label for="floatingTextarea2" class="form-label">About me</label>
-            <div class="form-floating">
-                <textarea class="form-control" name="comment" placeholder="Leave a comment here" title="about me" id="floatingTextarea2" style="height: 100px"></textarea>
-                <label for="floatingTextarea2">Comments</label>
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Register personal datas</button>
-    </form>
-    <br>
-    <a href="{% url 'home' %}" class="btn btn-secondary" role="button">To home</a>
-</section>
 {% endblock content %}
