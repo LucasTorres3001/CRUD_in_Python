@@ -155,7 +155,7 @@ def add_users(request: HttpRequest):
 
 def data_update_page(request: HttpRequest, slug: str):
     if request.user.is_authenticated:
-        personal_data = PersonalData.objects.get(slug=slug)
+        personal_data = get_object_or_404(PersonalData, slug=slug)
         workplace = personal_data.workplace
         workplaces = Workplace.objects.all()
         return render(
@@ -275,7 +275,7 @@ def register_login(request: HttpRequest):
 
 def show_data(request: HttpRequest, slug: str):
     if request.user.is_authenticated:
-        personal_data = PersonalData.objects.get(slug=slug)
+        personal_data = get_object_or_404(PersonalData, slug=slug)
         birthplace = personal_data.birthplace
         job = personal_data.job
         return render(
