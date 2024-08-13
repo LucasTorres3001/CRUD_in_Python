@@ -6,11 +6,11 @@ from decimal import Decimal
 from datetime import datetime
 from .forms import ContactForm
 from django.urls import reverse
-from django.contrib import auth
 from django.conf import settings
 from django.http import HttpRequest
 from django.contrib.auth.models import User
 from django.contrib.messages import add_message, constants
+from django.contrib.auth import authenticate, login, logout
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Birthplace, Comment, Imagem, Job, PersonalData, Workplace
@@ -24,8 +24,8 @@ def add_jobs(request: HttpRequest):
             template_name='add_jobs.html'
         )
     elif request.method == 'POST':
-        profession_name = str(request.POST['job'])
-        salary = request.POST['salary']
+        profession_name = request.POST.get('job')
+        salary = request.POST.get('salary')
         try:
             if (len(profession_name.strip()) < 4) or (len(salary.strip()) < 1) or (float(salary) < 1411.9):
                 add_message(request=request, level=constants.WARNING, message='Invalid profession.')
@@ -49,10 +49,10 @@ def add_places(request: HttpRequest):
             template_name='add_places.html'
         )
     elif request.method == 'POST':
-        city = request.POST['city']
-        uf = request.POST['uf']
-        ddd = request.POST['ddd']
-        region = request.POST['region']
+        city = request.POST.get('city')
+        uf = request.POST.get('uf')
+        ddd = request.POST.get('ddd')
+        region = request.POST.get('region')
         try:
             if (len(city.strip()) < 3) or (len(uf.strip()) < 2) or (len(region.strip()) < 5) or (ddd == None):
                 add_message(request=request, level=constants.WARNING, message='Invalid location.')
@@ -97,18 +97,18 @@ def add_users(request: HttpRequest):
             add_message(request=request, level=constants.INFO, message='User is not logged in.')
             return redirect(to=reverse(viewname='login'))
     elif request.method == 'POST':
-        name = str(request.POST['first_name'])
-        surname = str(request.POST['last_name'])
-        cpf = str(request.POST['cpf'])
-        gender = str(request.POST['gender'])
-        ethnicity = str(request.POST['ethnicity'])
+        name = request.POST.get('first_name')
+        surname = request.POST.get('last_name')
+        cpf = request.POST.get('cpf')
+        gender = request.POST.get('gender')
+        ethnicity = request.POST.get('ethnicity')
         try:
-            date_of_birth = request.POST['date_of_birth']
-            about_me = request.POST['comment']
+            date_of_birth = request.POST.get('date_of_birth')
+            about_me = request.POST.get('comment')
             formatted_date = datetime.strptime(date_of_birth, '%Y-%m-%d')
-            birthplace = int(request.POST['birthplace_id'])
-            workplace = int(request.POST['workplace_id'])
-            job = int(request.POST['job_id'])
+            birthplace = int(request.POST.get('birthplace_id'))
+            workplace = int(request.POST.get('workplace_id'))
+            job = int(request.POST.get('job_id'))
             user = request.user
             if len(name.strip()) < 3 or len(surname.strip()) < 3 or len(cpf.strip()) < 11:
                 add_message(request=request, level=constants.WARNING, message='Invalid username or CPF.')
@@ -183,7 +183,7 @@ def home(request: HttpRequest):
                 }
             )
         elif request.method == 'POST':
-            cpf = str(request.POST['cpf'])
+            cpf = request.POST.get('cpf')
             personal_data = PersonalData.objects.filter(user=request.user).filter(cpf__icontains=cpf)
             return render(
                 request=request,
@@ -197,7 +197,7 @@ def home(request: HttpRequest):
         add_message(request=request, level=constants.ERROR, message='User is not logged in.')
         return redirect(to=reverse(viewname='login'))
 
-def login(request: HttpRequest):
+def log_in(request: HttpRequest):
     if request.method == 'GET':
         if request.user.is_authenticated:
             return redirect(to=reverse(viewname='home'))
@@ -206,11 +206,11 @@ def login(request: HttpRequest):
             template_name='login.html'
         )
     elif request.method == 'POST':
-        username = str(request.POST['username'])
-        password = str(request.POST['password'])
-        user = auth.authenticate(request=request, username=username, password=password)
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request=request, username=username, password=password)
         if user:
-            auth.login(request=request, user=user)
+            login(request=request, user=user)
             return redirect(to=reverse(viewname='home'))
         else:
             add_message(request=request, level=constants.WARNING, message='User not found.')
@@ -237,11 +237,11 @@ def register_login(request: HttpRequest):
             template_name='register_login.html'
         )
     elif request.method == 'POST':
-        first_name = str(request.POST['first_name'])
-        last_name = str(request.POST['last_name'])
-        username_email = str(request.POST['username'])
-        server = str(request.POST['server'])
-        password = str(request.POST['password'])
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        username_email = request.POST.get('username')
+        server = request.POST.get('server')
+        password = request.POST.get('password')
         email = f"{username_email}@{server}"
         username = f'{first_name} {last_name}'
         user = User.objects.filter(username=username).filter(email=email).filter(password=password)
@@ -302,15 +302,15 @@ def teste(request: HttpRequest):
     )
 
 def to_go_out(request: HttpRequest):
-    auth.logout(request=request)
+    logout(request=request)
     return redirect(to=reverse(viewname='login'))
 
 def update_data(request: HttpRequest):
-    new_workplace = int(request.POST['new_workplace_id'])
+    new_workplace = int(request.POST.get('new_workplace_id'))
     new_images = request.FILES.getlist('new_images')
-    new_comment = request.POST['new_comment']
+    new_comment = request.POST.get('new_comment')
     
-    personal_data = get_object_or_404(PersonalData, slug=request.POST['pd_slug'])
+    personal_data = get_object_or_404(PersonalData, slug=request.POST.get('pd_slug'))
     personal_data.workplace_id = new_workplace
     personal_data.save()
     if new_images:
